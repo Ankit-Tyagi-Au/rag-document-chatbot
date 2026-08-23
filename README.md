@@ -1,6 +1,6 @@
 # Document Q&A System using RAG
 
-A document question-answering system that uses Retrieval-Augmented Generation (RAG) to answer questions based on the content of a PDF document. Upload a document, ingest it into a vector database, and ask questions — the AI retrieves relevant sections and generates accurate answers.
+A document question-answering system that uses Retrieval-Augmented Generation (RAG) to answer questions based on the content of a PDF document. Currently loaded with a sample document — the Universal Declaration of Human Rights. Click "Ingest the Data," then ask questions about it — the AI retrieves relevant sections and generates accurate answers based on the document's content.
 
 ## What it does
 
