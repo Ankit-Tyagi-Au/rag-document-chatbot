@@ -8,7 +8,7 @@ from langchain_classic.chains.combine_documents import create_stuff_documents_ch
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_classic.chains import create_retrieval_chain
 from langchain_community.vectorstores import FAISS
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 load_dotenv()
@@ -32,14 +32,10 @@ Questions:{input}
 
 prompt = ChatPromptTemplate.from_template(prompt_template)
 
-uploaded_file = st.file_uploader("Upload a PDF document", type="pdf")
-
-def vector_embedding(uploaded_file):
+def vector_embedding():
     if "vectors" not in st.session_state:
         st.session_state.embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
-        with open("temp.pdf", "wb") as f:
-            f.write(uploaded_file.getbuffer())
-        loader = PyPDFLoader("temp.pdf")
+        loader = PyPDFDirectoryLoader("./Artifacts")
         docs = loader.load()
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         final_documents = text_splitter.split_documents(docs[:20])
@@ -47,12 +43,9 @@ def vector_embedding(uploaded_file):
 
 prompt1 = st.text_input("Enter Your Question From Documents")
 
-if uploaded_file is not None:
-    if st.button("Ingest the Data into Vector Store"):
-        vector_embedding(uploaded_file)
-        st.write("Data is Ingested in vector store database. You can now ask questions.")
-else:
-    st.info("Please upload a PDF document first.")
+if st.button("Ingest the Data into Vector Store"):
+    vector_embedding()
+    st.write("Data is Ingested in vector store database. You can now ask questions.")
 
 if prompt1:
     try:
